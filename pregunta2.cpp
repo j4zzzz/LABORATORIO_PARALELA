@@ -12,12 +12,15 @@ int main() {
     vector<vector<int>> B(max, vector<int>(max));
     vector<vector<int>> C(max, vector<int>(max));
     int c = 0;
-    for (int i = 0; i < max; i++)
+    for (int i = 0; i < max; i++){
         for (int j = 0; j < max; j++) {
-            A[i][j] = (i + j) % 10;
-            B[i][j] = (i * j) % 10;
+            A[i][j] = c;
+            B[i][j] = c*2;
+            c++;
         }
+    }
 
+    
     auto start = high_resolution_clock::now();
     
     for (int i = 0; i < max; i++) {
