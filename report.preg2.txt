@@ -1,0 +1,88 @@
+--------------------------------------------------------------------------------
+-- Metadata
+--------------------------------------------------------------------------------
+Invocation:       /usr/bin/cg_annotate cachegrind.preg2
+Command:          ./pregunta2_dbg
+Events recorded:  Ir
+Events shown:     Ir
+Event sort order: Ir
+Threshold:        0.1%
+Annotation:       on
+
+--------------------------------------------------------------------------------
+-- Summary
+--------------------------------------------------------------------------------
+Ir____________________ 
+
+9,034,632,092 (100.0%)  PROGRAM TOTALS
+
+--------------------------------------------------------------------------------
+-- File:function summary
+--------------------------------------------------------------------------------
+  Ir__________________________  file:function
+
+< 9,029,009,057 (99.9%, 99.9%)  /home/jaz/Documentos/PARALELA/LABORATORIO_PARALELA/pregunta2.cpp:main
+
+--------------------------------------------------------------------------------
+-- Function:file summary
+--------------------------------------------------------------------------------
+  Ir__________________________  function:file
+
+> 9,029,017,639 (99.9%, 99.9%)  main:
+  9,029,009,057 (99.9%)           /home/jaz/Documentos/PARALELA/LABORATORIO_PARALELA/pregunta2.cpp
+
+--------------------------------------------------------------------------------
+-- Annotated source file: /home/jaz/Documentos/PARALELA/LABORATORIO_PARALELA/pregunta2.cpp
+--------------------------------------------------------------------------------
+Ir___________________ 
+
+            .          #include <iostream>
+            .          #include <vector>
+            .          #include <chrono>
+            .          using namespace std;
+            .          using namespace std::chrono;
+            .          
+            .          
+            .          
+            7  (0.0%)  int main() {
+            .              int max = 1000;
+           10  (0.0%)      vector<vector<int>> A(max, vector<int>(max));
+            8  (0.0%)      vector<vector<int>> B(max, vector<int>(max));
+            6  (0.0%)      vector<vector<int>> C(max, vector<int>(max));
+            .              int c = 0;
+        4,001  (0.0%)      for (int i = 0; i < max; i++)
+    4,000,000  (0.0%)          for (int j = 0; j < max; j++) {
+    8,000,001  (0.1%)              A[i][j] = (i + j) % 10;
+    8,000,000  (0.1%)              B[i][j] = (i * j) % 10;
+            .                  }
+            .          
+            2  (0.0%)      auto start = high_resolution_clock::now();
+            .              
+        4,000  (0.0%)      for (int i = 0; i < max; i++) {
+    4,001,000  (0.0%)          for (int j = 0; j < max; j++) {
+    3,000,000  (0.0%)              C[i][j] = 0;
+4,002,000,000 (44.3%)              for (int k = 0; k < max; k++) {
+5,000,000,000 (55.3%)                  C[i][j] += A[i][k] * B[k][j];
+            .                      }
+            .                  }
+            .              }
+            .          
+            .          
+            3  (0.0%)      auto end = high_resolution_clock::now();
+            .          
+            4  (0.0%)      cout << "Tiempo: " << duration_cast<milliseconds>(end - start).count() << endl;
+            .              return 0;
+           15  (0.0%)  
+
+--------------------------------------------------------------------------------
+-- Annotation summary
+--------------------------------------------------------------------------------
+Ir___________________ 
+
+9,029,009,057 (99.9%)    annotated: files known & above threshold & readable, line numbers known
+            0            annotated: files known & above threshold & readable, line numbers unknown
+            0          unannotated: files known & above threshold & two or more non-identical
+            0          unannotated: files known & above threshold & unreadable 
+    5,593,948  (0.1%)  unannotated: files known & below threshold
+       29,087  (0.0%)  unannotated: files unknown
+

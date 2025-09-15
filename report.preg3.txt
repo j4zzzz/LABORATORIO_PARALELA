@@ -1,0 +1,309 @@
+--------------------------------------------------------------------------------
+-- Metadata
+--------------------------------------------------------------------------------
+Invocation:       /usr/bin/cg_annotate cachegrind.preg3
+Command:          ./pregunta3_dbg
+Events recorded:  Ir
+Events shown:     Ir
+Event sort order: Ir
+Threshold:        0.1%
+Annotation:       on
+
+--------------------------------------------------------------------------------
+-- Summary
+--------------------------------------------------------------------------------
+Ir_____________________ 
+
+10,186,645,230 (100.0%)  PROGRAM TOTALS
+
+--------------------------------------------------------------------------------
+-- File:function summary
+--------------------------------------------------------------------------------
+  Ir___________________________  file:function
+
+< 10,120,625,194 (99.4%, 99.4%)  /home/jaz/Documentos/PARALELA/LABORATORIO_PARALELA/pregunta3.cpp:main
+
+<     60,452,174  (0.6%, 99.9%)  /usr/include/c++/14/bits/stl_vector.h:
+      60,404,027  (0.6%)           main
+
+--------------------------------------------------------------------------------
+-- Function:file summary
+--------------------------------------------------------------------------------
+  Ir___________________________  function:file
+
+> 10,181,030,777 (99.9%, 99.9%)  main:
+  10,120,625,194 (99.4%)           /home/jaz/Documentos/PARALELA/LABORATORIO_PARALELA/pregunta3.cpp
+      60,404,027  (0.6%)           /usr/include/c++/14/bits/stl_vector.h
+
+--------------------------------------------------------------------------------
+-- Annotated source file: /home/jaz/Documentos/PARALELA/LABORATORIO_PARALELA/pregunta3.cpp
+--------------------------------------------------------------------------------
+Ir___________________ 
+
+            .          #include <iostream>
+            .          #include <vector>
+            .          #include <chrono>
+            .          using namespace std;
+            .          using namespace std::chrono;
+            .          
+            .          
+            .          
+            7  (0.0%)  int main() {
+            .              int max = 1000;
+            .              int current = 100;
+            8  (0.0%)      vector<vector<int>> A(max, vector<int>(max));
+            7  (0.0%)      vector<vector<int>> B(max, vector<int>(max));
+            6  (0.0%)      vector<vector<int>> C(max, vector<int>(max));
+            .              int c = 0;
+        4,001  (0.0%)      for (int i = 0; i < max; i++){
+    4,000,000  (0.0%)          for (int j = 0; j < max; j++) {
+    8,000,001  (0.1%)              A[i][j] = (i + j) % 10;
+    8,000,000  (0.1%)              B[i][j] = (i * j) % 10;
+            .                  }
+            .              }
+            .          
+            2  (0.0%)      auto start = high_resolution_clock::now();
+            .              
+           50  (0.0%)      for (int ii = 0; ii < max; ii += current) {
+        1,910  (0.0%)          for (int jj = 0; jj < max; jj += current) {
+        7,100  (0.0%)              for (int kk = 0; kk < max; kk += current) {
+      312,080  (0.0%)                  for (int i = ii; i < min(ii + current, max); i++) {
+   30,300,000  (0.3%)                      for (int j = jj; j < min(jj + current, max); j++) {
+   30,000,000  (0.3%)                          double sum = C[i][j];
+4,020,000,000 (39.5%)                          for (int k = kk; k < min(kk + current, max); k++) {
+6,000,000,000 (58.9%)                              sum += A[i][k] * B[k][j];
+            .                                  }
+   20,000,000  (0.2%)                          C[i][j] = sum;
+            .                              }
+            .                          }
+            .                      }
+            .                  }
+            .              }
+            .          
+            .          
+            3  (0.0%)      auto end = high_resolution_clock::now();
+            .          
+            4  (0.0%)      cout << "Tiempo: " << duration_cast<milliseconds>(end - start).count() << endl;
+            .              return 0;
+           15  (0.0%)  
+
+--------------------------------------------------------------------------------
+-- Annotated source file: /usr/include/c++/14/bits/stl_vector.h
+--------------------------------------------------------------------------------
+Ir_______________ 
+
+-- line 91 ----------------------------------------
+         .               struct _Vector_impl_data
+         .               {
+         .         	pointer _M_start;
+         .         	pointer _M_finish;
+         .         	pointer _M_end_of_storage;
+         .         
+         .         	_GLIBCXX20_CONSTEXPR
+         .         	_Vector_impl_data() _GLIBCXX_NOEXCEPT
+     9,016 (0.0%)  	: _M_start(), _M_finish(), _M_end_of_storage()
+         .         	{ }
+         .         
+         .         #if __cplusplus >= 201103L
+         .         	_GLIBCXX20_CONSTEXPR
+         .         	_Vector_impl_data(_Vector_impl_data&& __x) noexcept
+         .         	: _M_start(__x._M_start), _M_finish(__x._M_finish),
+         .         	  _M_end_of_storage(__x._M_end_of_storage)
+         .         	{ __x._M_start = __x._M_finish = __x._M_end_of_storage = pointer(); }
+-- line 107 ----------------------------------------
+-- line 361 ----------------------------------------
+         .               : _M_impl(_Tp_alloc_type(__a), std::move(__x._M_impl))
+         .               { }
+         .         #endif
+         .         
+         .               _GLIBCXX20_CONSTEXPR
+         .               ~_Vector_base() _GLIBCXX_NOEXCEPT
+         .               {
+         .         	_M_deallocate(_M_impl._M_start,
+     9,018 (0.0%)  		      _M_impl._M_end_of_storage - _M_impl._M_start);
+         .               }
+         .         
+         .             public:
+         .               _Vector_impl _M_impl;
+         .         
+         .               _GLIBCXX20_CONSTEXPR
+         .               pointer
+         .               _M_allocate(size_t __n)
+         .               {
+         .         	typedef __gnu_cxx::__alloc_traits<_Tp_alloc_type> _Tr;
+     6,009 (0.0%)  	return __n != 0 ? _Tr::allocate(_M_impl, __n) : pointer();
+         .               }
+         .         
+         .               _GLIBCXX20_CONSTEXPR
+         .               void
+         .               _M_deallocate(pointer __p, size_t __n)
+         .               {
+         .         	typedef __gnu_cxx::__alloc_traits<_Tp_alloc_type> _Tr;
+     6,012 (0.0%)  	if (__p)
+         .         	  _Tr::deallocate(_M_impl, __p, __n);
+         .               }
+         .         
+         .             protected:
+         .         
+         .               _GLIBCXX20_CONSTEXPR
+         .               void
+         .               _M_create_storage(size_t __n)
+         .               {
+     9,012 (0.0%)  	this->_M_impl._M_start = this->_M_allocate(__n);
+         .         	this->_M_impl._M_finish = this->_M_impl._M_start;
+     6,012 (0.0%)  	this->_M_impl._M_end_of_storage = this->_M_impl._M_start + __n;
+         .               }
+         .             };
+         .         
+         .           /**
+         .            *  @brief A standard container which offers fixed time access to
+         .            *  individual elements in any order.
+         .            *
+         .            *  @ingroup sequences
+-- line 408 ----------------------------------------
+-- line 561 ----------------------------------------
+         .                *  @brief  Creates a %vector with copies of an exemplar element.
+         .                *  @param  __n  The number of elements to initially create.
+         .                *  @param  __value  An element to copy.
+         .                *  @param  __a  An allocator.
+         .                *
+         .                *  This constructor fills the %vector with @a __n copies of @a __value.
+         .                */
+         .               _GLIBCXX20_CONSTEXPR
+        15 (0.0%)        vector(size_type __n, const value_type& __value,
+         .         	     const allocator_type& __a = allocator_type())
+         .               : _Base(_S_check_init_len(__n, __a), __a)
+        18 (0.0%)        { _M_fill_initialize(__n, __value); }
+         .         #else
+         .               /**
+         .                *  @brief  Creates a %vector with copies of an exemplar element.
+         .                *  @param  __n  The number of elements to initially create.
+         .                *  @param  __value  An element to copy.
+         .                *  @param  __a  An allocator.
+         .                *
+         .                *  This constructor fills the %vector with @a __n copies of @a __value.
+-- line 580 ----------------------------------------
+-- line 725 ----------------------------------------
+         .         
+         .               /**
+         .                *  The dtor only erases the elements, and note that if the
+         .                *  elements themselves are pointers, the pointed-to memory is
+         .                *  not touched in any way.  Managing the pointer is the user's
+         .                *  responsibility.
+         .                */
+         .               _GLIBCXX20_CONSTEXPR
+        12 (0.0%)        ~vector() _GLIBCXX_NOEXCEPT
+         .               {
+         6 (0.0%)  	std::_Destroy(this->_M_impl._M_start, this->_M_impl._M_finish,
+         .         		      _M_get_Tp_allocator());
+         .         	_GLIBCXX_ASAN_ANNOTATE_BEFORE_DEALLOC;
+        15 (0.0%)        }
+         .         
+         .               /**
+         .                *  @brief  %Vector assignment operator.
+         .                *  @param  __x  A %vector of identical element and allocator types.
+         .                *
+         .                *  All the elements of @a __x are copied, but any unused capacity in
+         .                *  @a __x will not be copied.
+         .                *
+-- line 746 ----------------------------------------
+-- line 985 ----------------------------------------
+         .               { return const_reverse_iterator(begin()); }
+         .         #endif
+         .         
+         .               // [23.2.4.2] capacity
+         .               /**  Returns the number of elements in the %vector.  */
+         .               _GLIBCXX_NODISCARD _GLIBCXX20_CONSTEXPR
+         .               size_type
+         .               size() const _GLIBCXX_NOEXCEPT
+     3,009 (0.0%)        { return size_type(this->_M_impl._M_finish - this->_M_impl._M_start); }
+         .         
+         .               /**  Returns the size() of the largest possible %vector.  */
+         .               _GLIBCXX_NODISCARD _GLIBCXX20_CONSTEXPR
+         .               size_type
+         .               max_size() const _GLIBCXX_NOEXCEPT
+         .               { return _S_max_size(_M_get_Tp_allocator()); }
+         .         
+         .         #if __cplusplus >= 201103L
+-- line 1001 ----------------------------------------
+-- line 1123 ----------------------------------------
+         .                *  out_of_range lookups are not defined. (For checked lookups
+         .                *  see at().)
+         .                */
+         .               _GLIBCXX_NODISCARD _GLIBCXX20_CONSTEXPR
+         .               reference
+         .               operator[](size_type __n) _GLIBCXX_NOEXCEPT
+         .               {
+         .         	__glibcxx_requires_subscript(__n);
+60,404,005 (0.6%)  	return *(this->_M_impl._M_start + __n);
+         .               }
+         .         
+         .               /**
+         .                *  @brief  Subscript access to the data contained in the %vector.
+         .                *  @param __n The index of the element for which data should be
+         .                *  accessed.
+         .                *  @return  Read-only (constant) reference to data.
+         .                *
+-- line 1139 ----------------------------------------
+-- line 1700 ----------------------------------------
+         .         	}
+         .         
+         .               // Called by the first initialize_dispatch above and by the
+         .               // vector(n,value,a) constructor.
+         .               _GLIBCXX20_CONSTEXPR
+         .               void
+         .               _M_fill_initialize(size_type __n, const value_type& __value)
+         .               {
+         3 (0.0%)  	this->_M_impl._M_finish =
+         .         	  std::__uninitialized_fill_n_a(this->_M_impl._M_start, __n, __value,
+         .         					_M_get_Tp_allocator());
+         .               }
+         .         
+         .         #if __cplusplus >= 201103L
+         .               // Called by the vector(n) constructor.
+         .               _GLIBCXX20_CONSTEXPR
+         .               void
+         .               _M_default_initialize(size_type __n)
+         .               {
+         3 (0.0%)  	this->_M_impl._M_finish =
+         .         	  std::__uninitialized_default_n_a(this->_M_impl._M_start, __n,
+         .         					   _M_get_Tp_allocator());
+         .               }
+         .         #endif
+         .         
+         .               // Internal assign functions follow.  The *_aux functions do the actual
+         .               // assignment work for the range versions.
+         .         
+-- line 1727 ----------------------------------------
+-- line 1911 ----------------------------------------
+         .         	const size_type __len = size() + (std::max)(size(), __n);
+         .         	return (__len < size() || __len > max_size()) ? max_size() : __len;
+         .               }
+         .         
+         .               // Called by constructors to check initial size.
+         .               static _GLIBCXX20_CONSTEXPR size_type
+         .               _S_check_init_len(size_type __n, const allocator_type& __a)
+         .               {
+         9 (0.0%)  	if (__n > _S_max_size(_Tp_alloc_type(__a)))
+         .         	  __throw_length_error(
+         .         	      __N("cannot create std::vector larger than max_size()"));
+         .         	return __n;
+         .               }
+         .         
+         .               static _GLIBCXX20_CONSTEXPR size_type
+         .               _S_max_size(const _Tp_alloc_type& __a) _GLIBCXX_NOEXCEPT
+         .               {
+-- line 1927 ----------------------------------------
+
+--------------------------------------------------------------------------------
+-- Annotation summary
+--------------------------------------------------------------------------------
+Ir____________________ 
+
+10,181,077,368 (99.9%)    annotated: files known & above threshold & readable, line numbers known
+             0            annotated: files known & above threshold & readable, line numbers unknown
+             0          unannotated: files known & above threshold & two or more non-identical
+             0          unannotated: files known & above threshold & unreadable 
+     5,538,775  (0.1%)  unannotated: files known & below threshold
+        29,087  (0.0%)  unannotated: files unknown
+
